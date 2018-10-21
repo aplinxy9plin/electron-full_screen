@@ -1,4 +1,6 @@
-body,html {text-align:left;
+body,html {
+    cursor: none;
+    text-align:left;
     display: grid;
     font:12px Arial, Helvetica, sans-serif;
     color:#000; background: black;
