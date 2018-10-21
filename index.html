@@ -1,19 +1,92 @@
 <!DOCTYPE html>
-<html lang="ru" >
-
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>MegaHackathon NSK</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel='stylesheet' href='https://s3-us-west-2.amazonaws.com/s.cdpn.io/104946/animate.min.css'>
-  <link rel="stylesheet" href="css/style.css"> -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'/>
+  <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-  <h1>Hello</h1>
-<!-- <button id="bitch">RECIEVE</button> -->
-<script>window.$ = window.jQuery = require('jquery');</script>
-    <script>require('./renderer.js')</script>
-    <!-- <script  src="js/index.js"></script> -->
+	<div class="wrapper">
+		<div class="background">
+			<div class="widget">
+				<div class="leftside">
+					<div class="front">
+						<div class="time">
+							<div class="time-cont"></div>
+							<div class="date"></div>
+						</div>
+					</div>
+				</div>
+				<div class="rightside">
+					<div class="front">
+						<ul class="infos">
+							<li>
+								<i class="sun"></i>
+								<span>Sunny, 30˚C</span>
+							</li>
+							<li>
+								<i class="wind"></i>
+								<span>6.4 km/u, SW</span>
+							</li>
+							<li>
+								<span class="spacer"></span>
+							</li>
+							<li>
+								<i class="tasks"></i>
+								<span>5 tasks</span>
+							</li>
+							<li>
+								<i class="bus"></i>
+								<span>Departs at 8:50</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  <script>
+    window.$ = window.jQuery = require('jquery');
+    function updateClock(){
+    var currentTime = new Date ();
+    var currentHours = currentTime.getHours ( );
+    var currentMinutes = currentTime.getMinutes ( );
+    var monthNames = [ "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" ];
+    currentTime.setDate(currentTime.getDate());
+    currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
+    currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+    currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+    var currentTimeString = currentHours + ":" + currentMinutes;
+    $(".time-cont").html(currentTimeString);
+    $('.date').html(currentTime.getDate() + ' ' + monthNames[currentTime.getMonth()]);
+    }
+    $.fn.togglePlaceholder = function(){
+    return this.each(function() {
+    $(this)
+    .data("holder", $(this).attr("placeholder"))
+    .focusin(function(){
+        $(this).attr('placeholder','');
+    })
+    .focusout(function(){
+        $(this).attr('placeholder',$(this).data('holder'));
+    });
+    });
+    };
+    $(document).ready(function(){
+    setInterval('updateClock()', 200);
+    $('.settings').click(function(){
+    $('.leftside').addClass('flipl');
+    $('.rightside').addClass('flipr');
+    });
+    $('.return').click(function(){
+    $('.leftside').removeClass('flipl');
+    $('.rightside').removeClass('flipr');
+    });
+    $("[placeholder]").togglePlaceholder();
+    });
+
+  </script>
+  <script>require('./renderer.js')</script>
 </body>
 </html>

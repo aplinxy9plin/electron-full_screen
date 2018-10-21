@@ -13,7 +13,9 @@ function createWindow () {
        minHeight: 610,
        minWidth: 561
      });
-  // mainWindow.setFullScreen(true)
+  // for the full screen!!!
+  mainWindow.setFullScreen(true)
+
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
   // Open the DevTools.
