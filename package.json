@@ -17,15 +17,12 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-<<<<<<< HEAD
     "electron": "^3.0.0"
   },
   "dependencies": {
     "express": "^4.16.3",
     "jquery": "^3.3.1",
-    "vk-io": "^4.0.0-rc.5"
-=======
+    "vk-io": "^4.0.0-rc.5",
     "electron": "^3.0.4"
->>>>>>> fbc0cb7f9c7b33f6a86140c1c6089099948b3ab2
   }
 }
