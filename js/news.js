@@ -65,7 +65,7 @@ function displayNews(html){
       console.log(response);
       var html = '';
       data = response
-      for(var i = 8; i < 11; i++){
+      for(var i = 8; i < 10; i++){
           var content = '';
           if(data.articles[i].content !== null){
             content = data.articles[i].content

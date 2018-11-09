@@ -1,123 +1,176 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/font-awesome.min.css" rel="stylesheet">
-  <link href="css/mirror.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'/>
+  <link rel="stylesheet" type="text/css" href="css/mirror.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"  />
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 </head>
-
-<body>
-    <div class="row" id="up_div">
+<body style="background-color: black; color: white;">
+  <div class="row" id="up_div">
         <div class="col-xs-6 text-left" id="weather-panel">
-            <div>
-                <span class="title" id="temperature">-4˚</span>
+            <div style="font-size: 2em">
 
                 <figure class="icons">
-                    <canvas id="weather-icon" width="64" height="64" class="wind">
-                    </canvas>
+                  <img width="100px" src="https://ubisafe.org/images/auln-clipart-outline-4.png" />
+                    <!-- <canvas id="weather-icon" width="64" height="64" class="wind">
+                    </canvas> -->
                 </figure>
+                <!-- <p style="font-size: 2em" class="title" id="temperature"></p> -->
 
-                <p class="sub-title" id="hour-summary">Загрузка...</p>
-                <p class="sub-sub-title" id="day-summary"></p>
+                <p class="sub-sub-title" id="day-summary">Солнечно -4˚</p>
+                <p class="sub-title" id="hour-summary">Томск</p>
+
             </div>
         </div>
 
-        <div class="col-xs-6 text-right" id="clock-panel">
-            <div>
+        <div class="col-xs-6 text-right" id="clock-panel" style="padding-top: 0">
+            <div style="font-size: 1.3em">
                 <span class="title" id="hour">22</span>
-                <span class="title" id="separator">:</span>
-                <span class="title" id="minutes">10</span>
-                <p class="sub-title" id="day">Lundi^</p>
+                <!-- <span class="title" id="separator">:</span>
+                <span class="title" id="minutes">10</span> -->
+                <p class="sub-title" id="day">Пятница^</p>
                 <p class="sub-sub-title" id="date">10 janvier 2017</p>
             </div>
         </div>
     </div>
-
-
-    <!-- <div class="row">
-        <div id="videosList">
-          <div class="video">
-            <video class="thevideo" autoplay loop>
-              <source src="kent.mp4" type="video/mp4">
-              <source src="kent.webm" type="video/webm">
-            </video>
-          </div>
-      </div> -->
-        <!-- <div class="col-md-10 text-right" id="message-panel">
-            <div>
-                <p class="center-message">Hello pretty face!</p>
-                <p class="center-message">You look crazy beautiful today.</p>
-                <i class="fa fa-heart" aria-hidden="true"></i>
-            </div>
-        </div> -->
-    </div>
-
-
+    <div class="row">
+      <img class="video" src="ads.jpg" width="20%" />
+    </div><br />
     <div class="row" id="news_div">
         <div class="col-xs-6">
+            <img src="news.svg" width="50px" />
             <div class="text-left" id="news-panel"></div>
         </div>
-
-        <div class="col-xs-6" id="transport-panel">
-            <div class="line-schedule text-right" id="transport0"></div>
-            <div class="line-schedule text-right" id="transport1"></div>
-            <div class="line-schedule text-right" id="transport2"></div>
-            <div class="line-schedule text-right" id="transport3"></div>
-        </div>
     </div>
+  <script>
+    window.$ = window.jQuery = require('jquery');
+    var checkSize = true;
+    $('.video').on('click', function() {
+    if(checkSize){
+      document.getElementById('up_div').style.visibility = "hidden"
+      document.getElementById('up_div').style.display = "none"
+      document.getElementById('news_div').style.visibility = "hidden"
+      document.getElementsByClassName('video')[0].style.width = "100%"
+
+    document.getElementsByClassName('video')[0].style.height = "100%"
+
+
+    // document.getElementsByClassName('thevideo')[0].style.width = "100%"
+
+    // document.getElementsByClassName('thevideo')[0].style.height = "100%"
+    // document.getElementsByClassName('thevideo')[0].style.position = "100%"
+    // document.getElementsByClassName('thevideo')[0].style.position = "100%"
+
+      checkSize = 0
+    }else{
+          document.getElementsByClassName('video')[0].style.width = "20%"
+
+    document.getElementsByClassName('video')[0].style.height = ""
+
+
+    // document.getElementsByClassName('thevideo')[0].style.width = "600px"
+
+    // document.getElementsByClassName('thevideo')[0].style.height = "330px"
+    document.getElementById('up_div').style.visibility = "visible"
+    document.getElementById('up_div').style.display = "block"
+    document.getElementById('news_div').style.visibility = "visible"
+
+     checkSize = 1
+    }
+    });
+    function updateClock(){
+      var currentTime = new Date ();
+      var currentHours = currentTime.getHours ( );
+      var currentMinutes = currentTime.getMinutes ( );
+      var monthNames = [ "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December" ];
+      currentTime.setDate(currentTime.getDate());
+      currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
+      currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+      currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+      var currentTimeString = currentHours + ":" + currentMinutes;
+      $("#hour").html(currentTimeString);
+      // $('#hour').html(currentHours.getDate())
+      $('#date').html(currentTime.getDate() + ' ' + monthNames[currentTime.getMonth()] + ' 2018');
+    }
+    $.fn.togglePlaceholder = function(){
+    return this.each(function() {
+    $(this)
+    .data("holder", $(this).attr("placeholder"))
+    .focusin(function(){
+        $(this).attr('placeholder','');
+    })
+    .focusout(function(){
+        $(this).attr('placeholder',$(this).data('holder'));
+    });
+    });
+    };
+    $(document).ready(function(){
+    setInterval('updateClock()', 200);
+    $('.settings').click(function(){
+    $('.leftside').addClass('flipl');
+    $('.rightside').addClass('flipr');
+    });
+    $('.return').click(function(){
+    $('.leftside').removeClass('flipl');
+    $('.rightside').removeClass('flipr');
+    });
+    $("[placeholder]").togglePlaceholder();
+    });
+    // function displayNews(html){
+    //     var data;
+    //     var settings = {
+    //       "async": true,
+    //       "crossDomain": true,
+    //       "url": "https://newsapi.org/v2/top-headlines?apiKey=ce0ad27bc417447c835519893424de47&country=ru",
+    //       "method": "GET",
+    //       "headers": {}
+    //     }
+    //
+    //     $.ajax(settings).done(function (response) {
+    //       console.log(response);
+    //       var html = '';
+    //       data = response
+    //       for(var i = 8; i < 11; i++){
+    //           var content = '';
+    //           if(data.articles[i].content !== null){
+    //             content = data.articles[i].content
+    //           }
+    //           var item = '<div class="news-panel">' +
+    //               '<i class="fa fa-newspaper-o" aria-hidden="true"></i>' +
+    //               '<span class="sub-title"> ' + data.articles[i].title + '</span>' +
+    //               '<div class="news-field">' +
+    //               '<p class="news-short">'+ content + '</p></div></div><br><br>';
+    //           html += item;
+    //       }
+    //
+    //       $('#news-panel').html(html);
+    //     });
+
+        // var data = [
+        //   {
+        //     title: "qwe",
+        //     description: "asdasdasd"
+        //   },
+        //   {
+        //     title: "qwe",
+        //     description: "asdasdasd"
+        //   },
+        //   {
+        //     title: "qwe",
+        //     description: "asdasdasd"
+        //   }
+        // ]
+        // articles
+    // }
+
+    // displayNews()
+  </script>
+  <script>
+    require('./renderer.js')
+    require('./js/news.js')
+    require('./js/transport.js')
+  </script>
 </body>
-
-<!-- External libs fix -->
-
-<script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
-<script src="libs/jquery.min.js"></script>
-<script src="libs/bootstrap.min.js"></script>
-<script src="libs/skycons.js"></script>
-<script>
-var checkSize = true;
-$('.thevideo').on('click', function() {
-if(checkSize){
-  document.getElementById('up_div').style.visibility = "hidden"
-  document.getElementById('up_div').style.display = "none"
-  document.getElementById('news_div').style.visibility = "hidden"
-  document.getElementsByClassName('video')[0].style.width = "100%"
-
-document.getElementsByClassName('video')[0].style.height = "100%"
-
-
-document.getElementsByClassName('thevideo')[0].style.width = "100%"
-
-document.getElementsByClassName('thevideo')[0].style.height = "100%"
-// document.getElementsByClassName('thevideo')[0].style.position = "100%"
-// document.getElementsByClassName('thevideo')[0].style.position = "100%"
-
-  checkSize = 0
-}else{
-      document.getElementsByClassName('video')[0].style.width = "600px"
-
-document.getElementsByClassName('video')[0].style.height = "330px"
-
-
-document.getElementsByClassName('thevideo')[0].style.width = "600px"
-
-document.getElementsByClassName('thevideo')[0].style.height = "330px"
-document.getElementById('up_div').style.visibility = "visible"
-document.getElementById('up_div').style.display = "block"
-document.getElementById('news_div').style.visibility = "visible"
-
- checkSize = 1
-}
-});
-</script>
-<script>
-  require('./js/renderer.js');
-  require('./js/weather.js');
-    require('./js/clock.js');
-    require('./js/news.js');
-    require('./js/transport.js');
-    require('./js/server.js');
-</script>
-
-<script>if (window.module) module = window.module;</script>
-
 </html>

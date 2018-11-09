@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 
 html {
-    cursor: none;
+    /* cursor: none; */
     overflow: hidden;
     font-size: 10px;
 }
@@ -16,7 +16,7 @@ body {
 
     margin: 40px;
 
-    font-size: 2em;
+    font-size: 3em;
     line-height: 1.5em;
     -webkit-font-smoothing: antialiased;
 
@@ -101,17 +101,18 @@ body {
     height: 280px;
 }
 .video {
-  height: 330px;
-  width: 600px;
-  margin-bottom: 50px;
   -webkit-transition:1s;
 }
-.thevideo{
+/* .video:hover{
+  height: 100%;
+  width: 100%;
+} */
+/* .thevideo{
     height: 330px;
   width: 600px;
   margin-bottom: 50px;
     -webkit-transition:1s;
-}
+} */
 #up_div{
   visibility: visible;
   display: block;
