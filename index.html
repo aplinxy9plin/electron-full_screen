@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/mirror.css" rel="stylesheet">
-
+<link href="css/mirror.css" rel="stylesheet">
 </head>
 
 <body>
@@ -39,7 +32,7 @@
     </div>
 
 
-    <div class="row">
+    <!-- <div class="row">
         <div id="videosList">
           <div class="video">
             <video class="thevideo" autoplay loop>
@@ -47,7 +40,7 @@
               <source src="kent.webm" type="video/webm">
             </video>
           </div>
-      </div>
+      </div> -->
         <!-- <div class="col-md-10 text-right" id="message-panel">
             <div>
                 <p class="center-message">Hello pretty face!</p>
@@ -115,7 +108,8 @@ document.getElementById('news_div').style.visibility = "visible"
 });
 </script>
 <script>
-    require('./js/weather.js');
+  require('./js/renderer.js');
+  require('./js/weather.js');
     require('./js/clock.js');
     require('./js/news.js');
     require('./js/transport.js');
