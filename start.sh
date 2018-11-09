@@ -1,1 +1,1 @@
-npm start && python distance.py
+npm start & python distance.py

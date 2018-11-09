@@ -38,11 +38,11 @@ while True:
     print "Distance:",distance,"cm"
     if distance < 100:
         if check == True:
-            # send request hide ads
+            # send request show ads
 
             url = "http://localhost:1338/distance"
 
-            querystring = {"distance":"hide"}
+            querystring = {"distance":"show"}
 
             payload = ""
             response = requests.request("GET", url, data=payload, params=querystring)
@@ -52,10 +52,10 @@ while True:
             check  = False
     else:
         if check == False:
-            # send request show ads
+            # send request hide ads
             url = "http://localhost:1338/distance"
 
-            querystring = {"distance":"show"}
+            querystring = {"distance":"hide"}
 
             payload = ""
             response = requests.request("GET", url, data=payload, params=querystring)
