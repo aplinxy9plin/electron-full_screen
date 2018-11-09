@@ -3,7 +3,7 @@ import time
 import requests
 
 check = True
-
+time.sleep(5)
 while True:
     GPIO.setmode(GPIO.BCM)
 

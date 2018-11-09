@@ -2,7 +2,6 @@
 const {app, BrowserWindow} = require('electron')
 var express = require('express')
 var server = express()
-var PythonShell = require('python-shell');
 //you can use error handling to see if there are any errors
 app.commandLine.appendSwitch("disable-gpu")
 app.commandLine.appendArgument("disable-gpu")
@@ -69,7 +68,6 @@ app.on('activate', function () {
 })
 server.listen(1338, () => {
   console.log('Server listening on port 1338');
-  PythonShell.run('distance.py')
 })
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
