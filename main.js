@@ -1,5 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
+var express = require('express')
+var server = express()
 app.commandLine.appendSwitch("disable-gpu")
 app.commandLine.appendArgument("disable-gpu")
 // Keep a global reference of the window object, if you don't, the window will
@@ -30,6 +32,17 @@ function createWindow () {
     mainWindow = null
   })
 }
+server.get('/distance', (req, res) => {
+  var check = req.query.distance;
+  if(check == "hide"){
+    // checkSize = true
+    mainWindow.webContents.executeJavaScript("checkSize = true; document.getElementsByClassName('video')[0].click()");
+  }else{
+    mainWindow.webContents.executeJavaScript("checkSize = false; document.getElementsByClassName('video')[0].click()");
+    // checkSize = false
+  }
+  res.send('good')
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -52,6 +65,8 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
+server.listen(1338, () => {
+  console.log('Server listening on port 1338');
+})
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
