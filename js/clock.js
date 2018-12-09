@@ -62,6 +62,7 @@ function displayClock(){
 
     $('#hour').text(time.hour);
     $('#minutes').text(time.minutes);
+    $('#time').text(time.hour + ":" + time.minutes)
 }
 
 function displayDate(){
@@ -77,7 +78,11 @@ function displayDate(){
         });
 
       $('#date').fadeOut(fadeValue, function () {
-          $(this).text(date.date + " " + date.month + " " + date.year);
+          var mon = "";
+          for (var i = 0; i < 3; i++) {
+            mon += date.month[i]
+          }
+          $(this).text(date.day + ", " + date.date + " " + mon+".");
           $(this).fadeIn(fadeValue);
         });
     }

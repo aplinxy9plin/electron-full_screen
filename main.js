@@ -1,7 +1,10 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 var express = require('express')
-// var server = express()
+var server = express()
+var NodeWebcam = require( "node-webcam" );
+var request = require("request");
+var imgur = require('imgur');
 // const io = require('socket.io')();
 // io.on('connection', client => {
 //   client.on('event', data => { /* … */ });
@@ -28,13 +31,6 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = 'token.json';
-
-// Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
-  if (err) return console.log('Error loading client secret file:', err);
-  // Authorize a client with credentials, then call the Google Calendar API.
-  authorize(JSON.parse(content), listEvents);
-});
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -102,19 +98,62 @@ function listEvents(auth) {
         console.log(`${start} - ${event.summary}`);
         console.log(event);
         var ev = JSON.stringify(event)
-        weather.find({search: 'Tomsk', degreeType: 'C'}, function(err, result) {
-          if(err) console.log(err);
-          var weath = JSON.stringify(result)
-          console.log(weath);
-          createWindow(ev, weath)
-        });
+        console.log(ev);
+        var d = new Date(event.start.dateTime)
+        // d.getFullYear() // year
+        const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+        const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        var day_week = days[d.getDay()]
+        var day_month = d.getUTCDate()
+        var month = ""
+        for (var i = 0; i < 3; i++) {
+          var z = months[d.getMonth()]
+          month += z[i]
+        }
+        month += '.'
+        var time_obj = getTimeMe(d)
+        var time = time_obj.hour + ":" + time_obj.minutes
+        var text = day_week + " " + day_month + " " + month + " " + time
+        var event_name = event.summary
+        mainWindow.webContents.executeJavaScript("$('#event_time').text('"+text+"'); $('#event_name').text('"+event_name+"')")
+        // d.getUTCDate() // day month
+        // d.getMonth() // month + 1
+        // d.getHours() // hours
+        // d.getMinutes() // minutes
       });
     } else {
       console.log('No upcoming events found.');
     }
   });
 }
+function format(i) {
 
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+function getTimeMe(date) {
+
+    var today = new Date(date),
+        h = today.getHours();
+        m = today.getMinutes();
+        s = today.getSeconds();
+
+    h = format(h);
+    m = format(m);
+    s = format(s);
+
+    return {
+        hour : h,
+        minutes : m,
+        seconds : s
+    };
+}
+app.on('ready', () => {
+  createWindow()
+})
 function createWindow (events, weath) {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -125,12 +164,21 @@ function createWindow (events, weath) {
      });
   // for the full screen!!!
   mainWindow.setFullScreen(true)
-
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
+  weather.find({search: 'Tomsk', degreeType: 'C'}, function(err, result) {
+    if(err) console.log(err);
+    // var weath = JSON.stringify(result)
+    console.log(weath);
+    mainWindow.webContents.executeJavaScript("$('#temperature').text('"+result[0].current.temperature+"°c'); $('#humidity').text('Влажность "+result[0].current.humidity+"'); $('#wind').text('Ветер  "+result[0].current.windspeed+"'); console.log('"+result[0].current.temperature+"');");
+  });
+  fs.readFile('credentials.json', (err, content) => {
+    if (err) return console.log('Error loading client secret file:', err);
+    // Authorize a client with credentials, then call the Google Calendar API.
+    authorize(JSON.parse(content), listEvents);
+  });
   // Open the DevTools.
   mainWindow.webContents.executeJavaScript("console.log('"+events+"');");
-  mainWindow.webContents.executeJavaScript("console.log('"+weath+"');");
   // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
@@ -145,15 +193,96 @@ function createWindow (events, weath) {
 server.get('/distance', (req, res) => {
   var check = req.query.distance;
   if(check == "hide"){
+    // createCapture()
     // checkSize = true
-    mainWindow.webContents.executeJavaScript("checkSize = true; document.getElementsByClassName('video')[0].click()");
+    mainWindow.webContents.executeJavaScript("document.getElementById('ads').style.display = 'block'");
   }else{
-    mainWindow.webContents.executeJavaScript("checkSize = false; document.getElementsByClassName('video')[0].click()");
+    mainWindow.webContents.executeJavaScript("document.getElementById('ads').style.display = 'none'; document.getElementById('doner').style.display = 'none'; document.getElementById('harats').style.display = 'none'");
     // checkSize = false
   }
   res.send('good')
 })
+var opts = {
+    width: 1280,
+    height: 720,
+    quality: 100,
+    delay: 0,
+    saveShots: true,
+    output: "jpeg",
+    device: false,
+    callbackReturn: "location",
+    verbose: false
 
+};
+var Webcam = NodeWebcam.create( opts );
+var stats = []
+function createCapture(){
+  NodeWebcam.capture( "my_picture", {}, function( err, data ) {
+      if ( !err ){
+          console.log( "Image created!" )
+          // Setting
+          imgur.setClientId('018ebfa932f27b1');
+              // A single image
+          imgur.uploadFile('my_picture.jpg')
+              .then(function (json) {
+                  // Replace <Subscription Key> with your valid subscription key.
+                  const subscriptionKey = '4e4286d7b1cd4989868725a00664c633';
+
+                  // You must use the same location in your REST call as you used to get your
+                  // subscription keys. For example, if you got your subscription keys from
+                  // westus, replace "westcentralus" in the URL below with "westus".
+                  // центральная южная часть сша
+                  const uriBase = 'https://southcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
+
+                  const imageUrl = json.data.link;
+
+                  // Request parameters.
+                  const params = {
+                      'returnFaceId': 'true',
+                      'returnFaceLandmarks': 'false',
+                      'returnFaceAttributes': 'emotion'
+                  };
+
+                  var options = {
+                      uri: uriBase,
+                      qs: params,
+                      body: '{"url": ' + '"' + imageUrl + '"}',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'Ocp-Apim-Subscription-Key' : subscriptionKey
+                      }
+                  };
+
+                  request.post(options, (error, response, body) => {
+                    if (error) {
+                      console.log('Error: ', error);
+                      return;
+                    }
+                    let jsonResponse = JSON.stringify(JSON.parse(body), null, '  ');
+                    console.log('JSON Response\n');
+                    console.log(jsonResponse);
+                    jsonResponse = JSON.parse(jsonResponse)
+                    var happiness = jsonResponse[0].faceAttributes.emotion.happiness,
+                        sadness = jsonResponse[0].faceAttributes.emotion.sadness;
+                    if(happiness > sadness){
+                      console.log('ti s4astliva suka', happiness);
+                      mainWindow.webContents.executeJavaScript("doner()")
+                    }else{
+                      console.log('ti grustniy suka', sadness);
+                      mainWindow.webContents.executeJavaScript("harats()")
+                    }
+                  });
+              })
+              .catch(function (err) {
+                  console.error(err.message);
+              });
+
+          // setInterval(createCapture, 15000)
+      } else {
+          console.log(err);
+      }
+  });
+}
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
